@@ -1,0 +1,36 @@
+name: Hexo Deploy
+
+on:
+  push:
+    branches:
+      - main  # 监听 main 分支的变动
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. 检查代码
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.HEXO_DEPLOY }}
+          submodules: true
+
+      - name: 2. 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 3. 安装依赖
+        run: npm install
+
+      - name: 4. 生成静态文件
+        run: npx hexo generate
+
+      - name: 5. 部署到 GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.HEXO_DEPLOY }}
+          publish_dir: ./public  # Hexo 生成的静态文件目录
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
