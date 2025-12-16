@@ -1,0 +1,555 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="橙子的小站" href="https://orangeplz.github.io/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="橙子的小站" href="https://orangeplz.github.io/atom.xml" />
+<link rel="alternate" type="application/json" title="橙子的小站" href="https://orangeplz.github.io/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="机器学习,LDA,技术" />
+
+
+<link rel="canonical" href="https://orangeplz.github.io/2025/12/16/LDA/">
+
+
+
+  <title>
+线性判别分析方法 - 技术 |
+橙子的小窝 = 橙子的小站 = 记录猪生活</title>
+<meta name="generator" content="Hexo 8.1.1"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">线性判别分析方法
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2025-12-16 09:45:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2025-12-16T09:45:00+08:00">2025-12-16</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">橙子的小窝</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+          <img src="https://static.wikitide.net/strinovawiki/1/11/Season_Story_BP2_AVGcg_06B.png">
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="item" rel="index" title="分类于 技术"><span itemprop="name">技术</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://orangeplz.github.io/2025/12/16/LDA/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/source/images/avatar.png">
+    <meta itemprop="name" content="橙子">
+    <meta itemprop="description" content="记录猪生活, ">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="橙子的小站">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="线性判别分析（LDA）分类方法"><a href="#线性判别分析（LDA）分类方法" class="headerlink" title="线性判别分析（LDA）分类方法"></a>线性判别分析（LDA）分类方法</h1><p>线性判别分析（Linear Discriminant Analysis, LDA）是一种经典的监督学习方法，常用于模式识别与数据降维。LDA 的主要目的是在多类别分类问题中找到最优的线性分割超平面，使得不同类别之间的差异最大化，同时使同一类别内部的差异最小化。本文将通过判别函数公式介绍 LDA，并通过具体数字示例展示如何使用 LDA 进行分类。</p>
+<h2 id="1-LDA-的基本原理"><a href="#1-LDA-的基本原理" class="headerlink" title="1. LDA 的基本原理"></a>1. LDA 的基本原理</h2><p>LDA 的目标是根据给定的样本数据，找到一个投影方向，将数据投影到低维空间，使得在这个空间中，各类数据之间的类间散度（<strong>between-class scatter</strong>）尽可能大，同一类别内部的数据点的类内散度（<strong>within-class scatter</strong>）尽可能小。</p>
+<h3 id="判别函数"><a href="#判别函数" class="headerlink" title="判别函数"></a>判别函数</h3><p>LDA 通过构建判别函数来进行分类。对于一个二分类问题，LDA 的判别函数形式如下：</p>
+<p>$$<br>\delta_k(\mathbf{x}) &#x3D; \mathbf{w}^T \mathbf{x} + b_k<br>$$<br>其中：</p>
+<ul>
+<li>$$<br>\delta_k(\mathbf{x})是类别 k对于输入样本 \mathbf{x} 的判别函数<br>$$</li>
+<li>$$<br>\mathbf{w}是投影向量，表示投影到低维空间后的方向<br>$$</li>
+<li>bk 是类别 (k) 的偏置项。</li>
+</ul>
+<p>通过计算每个类别的判别函数值，我们选择具有最大判别函数值的类别作为分类结果。</p>
+<p>对于多分类问题，LDA 会生成多个判别函数，并选择最大值对应的类别。</p>
+<h2 id="2-LDA-的分类步骤"><a href="#2-LDA-的分类步骤" class="headerlink" title="2. LDA 的分类步骤"></a>2. LDA 的分类步骤</h2><p>LDA 分类的过程可以概括为以下几个步骤：</p>
+<ol>
+<li><p><strong>计算类内散度矩阵</strong>：每个类别的样本点减去该类别的均值后，计算它们的协方差矩阵并加权求和。</p>
+<p>$$<br>S_W &#x3D; \sum_{k&#x3D;1}^{K} \sum_{x_i \in C_k} (x_i - \mu_k)(x_i - \mu_k)^T<br>$$</p>
+</li>
+<li><p><strong>计算类间散度矩阵</strong>：类间散度矩阵衡量的是各类均值与整体均值的差异。其公式为：<br>$$</p>
+<p>S_B &#x3D; \sum_{k&#x3D;1}^{K} N_k (\mu_k - \mu)(\mu_k - \mu)^T<br>$$<br>其中 Nk是类别 (k) 的样本数<br>$$<br>\mu_k 是类别 k 的均值，\mu<br>$$<br>是所有样本的均值。</p>
+</li>
+<li><p><strong>计算判别向量</strong>：LDA 通过最大化类间散度与类内散度的比率来求解投影向量。<br>$$<br>投影向量 \mathbf{w} 满足：<br>\mathbf{w} &#x3D; S_W^{-1}(\mu_1 - \mu_2)<br>$$</p>
+</li>
+<li><p><strong>分类决策</strong>：通过计算每个类别的判别函数值，并选择最大判别值对应的类别进行分类。</p>
+</li>
+</ol>
+<h2 id="3-LDA-分类的具体数字示例"><a href="#3-LDA-分类的具体数字示例" class="headerlink" title="3. LDA 分类的具体数字示例"></a>3. LDA 分类的具体数字示例</h2><p>假设我们有一个简单的二分类数据集，样本特征为 (x_1) 和 (x_2)，分类标签为类别 1 和类别 2。我们有以下数据：</p>
+<table>
+<thead>
+<tr>
+<th>样本编号</th>
+<th>(x_1)</th>
+<th>(x_2)</th>
+<th>类别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>4</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>6</td>
+<td>5</td>
+<td>2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>7</td>
+<td>6</td>
+<td>2</td>
+</tr>
+<tr>
+<td>6</td>
+<td>8</td>
+<td>7</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<h3 id="步骤-1：计算各类别均值"><a href="#步骤-1：计算各类别均值" class="headerlink" title="步骤 1：计算各类别均值"></a>步骤 1：计算各类别均值</h3><p>类别 1 和 类别 2 的均值为：</p>
+<ul>
+<li><p>$$<br>类别 1：\mu_1 &#x3D; \left( \frac{1+2+3}{3}, \frac{2+3+4}{3} \right) &#x3D; (2, 3)<br>$$</p>
+</li>
+<li><p>$$<br>类别 2：\mu_2 &#x3D; \left( \frac{6+7+8}{3}, \frac{5+6+7}{3} \right) &#x3D; (7, 6)<br>$$</p>
+</li>
+</ul>
+<h3 id="步骤-2：计算类内散度矩阵-S-W"><a href="#步骤-2：计算类内散度矩阵-S-W" class="headerlink" title="步骤 2：计算类内散度矩阵 (S_W)"></a>步骤 2：计算类内散度矩阵 (S_W)</h3><p>类内散度矩阵 (S_W) 计算方式如下：</p>
+<p>$$</p>
+<p>S_W &#x3D; \sum_{k&#x3D;1}^{2} \sum_{x_i \in C_k} (x_i - \mu_k)(x_i - \mu_k)^T<br>$$<br>对于类别 1 的样本 ((1, 2), (2, 3), (3, 4))，我们计算每个样本与均值的差异并求出其协方差：</p>
+<p>$$</p>
+<p>(x_1 - \mu_1) &#x3D; (-1, -1), (x_2 - \mu_1) &#x3D; (0, 0), (x_3 - \mu_1) &#x3D; (1, 1)<br>$$<br>对这些差异矩阵求和：<br>$$</p>
+<p>S_{W1} &#x3D; \begin{bmatrix} 1 &amp; 1 \ 1 &amp; 1 \end{bmatrix} + \begin{bmatrix} 0 &amp; 0 \ 0 &amp; 0 \end{bmatrix} + \begin{bmatrix} 1 &amp; 1 \ 1 &amp; 1 \end{bmatrix} &#x3D; \begin{bmatrix} 2 &amp; 2 \ 2 &amp; 2 \end{bmatrix}<br>$$<br>对于类别 2 的样本 ((6, 5), (7, 6), (8, 7))，我们计算其与均值的差异并求协方差：<br>$$</p>
+<p>(x_4 - \mu_2) &#x3D; (-1, -1), (x_5 - \mu_2) &#x3D; (0, 0), (x_6 - \mu_2) &#x3D; (1, 1)<br>$$<br>对这些差异矩阵求和：</p>
+<p>$$</p>
+<p>S_{W2} &#x3D; \begin{bmatrix} 1 &amp; 1 \ 1 &amp; 1 \end{bmatrix} + \begin{bmatrix} 0 &amp; 0 \ 0 &amp; 0 \end{bmatrix} + \begin{bmatrix} 1 &amp; 1 \ 1 &amp; 1 \end{bmatrix} &#x3D; \begin{bmatrix} 2 &amp; 2 \ 2 &amp; 2 \end{bmatrix}<br>$$<br>将两个类别的类内散度矩阵相加：</p>
+<p>$$</p>
+<p>S_W &#x3D; S_{W1} + S_{W2} &#x3D; \begin{bmatrix} 2 &amp; 2 \ 2 &amp; 2 \end{bmatrix} + \begin{bmatrix} 2 &amp; 2 \ 2 &amp; 2 \end{bmatrix} &#x3D; \begin{bmatrix} 4 &amp; 4 \ 4 &amp; 4 \end{bmatrix}<br>$$</p>
+<h3 id="步骤-3：计算类间散度矩阵-S-B"><a href="#步骤-3：计算类间散度矩阵-S-B" class="headerlink" title="步骤 3：计算类间散度矩阵 (S_B)"></a>步骤 3：计算类间散度矩阵 (S_B)</h3><p>类间散度矩阵计算为：</p>
+<p>$$</p>
+<p>S_B &#x3D; N_1 (\mu_1 - \mu)(\mu_1 - \mu)^T + N_2 (\mu_2 - \mu)(\mu_2 - \mu)^T<br>$$</p>
+<p>$$<br>其中 N_1 &#x3D; 3是类别 1 的样本数，N_2 &#x3D; 3 是类别 2 的样本数<br>$$</p>
+<p>$$<br>\mu &#x3D; \left( \frac{2+7}{2}, \frac{3+6}{2} \right) &#x3D; (4.5, 4.5) 是整体均值。<br>$$</p>
+<p>对于类别 1：</p>
+<p>$$</p>
+<p>(\mu_1 - \mu) &#x3D; (-2.5, -1.5)<br>$$</p>
+<p>$$<br>S_{B1} &#x3D; 3 \times \begin{bmatrix} -2.5 \ -1.5 \end{bmatrix} \times \begin{bmatrix} -2.5 &amp; -1.5 \end{bmatrix} &#x3D; 3 \times \begin{bmatrix} 6.25 &amp; 3.75 \ 3.75 &amp; 2.25 \end{bmatrix} &#x3D; \begin{bmatrix} 18.75 &amp; 11.25 \ 11.25 &amp; 6.75 \end{bmatrix}<br>$$</p>
+<p>对于类别 2：<br>$$<br>(\mu_2 - \mu) &#x3D; (2.5, 1.5)<br>$$</p>
+<p>$$<br>S_{B2} &#x3D; 3 \times \begin{bmatrix} 2.5 \ 1.5 \end{bmatrix} \times \begin{bmatrix} 2.5 &amp; 1.5 \end{bmatrix} &#x3D; 3 \times \begin{bmatrix} 6.25 &amp; 3.75 \ 3.75 &amp; 2.25 \end{bmatrix} &#x3D; \begin{bmatrix} 18.75 &amp; 11.25 \ 11.25 &amp; 6.75 \end{bmatrix}<br>$$</p>
+<p>因此，类间散度矩阵为：</p>
+<p>$$<br>S_B &#x3D; S_{B1} + S_{B2} &#x3D; \begin{bmatrix} 18.75 &amp; 11.25 \ 11.25 &amp; 6.75 \end{bmatrix} + \begin{bmatrix} 18.75 &amp; 11.25 \ 11.25 &amp; 6.75 \end{bmatrix} &#x3D; \begin{bmatrix} 37.5 &amp; 22.5 \ 22.5 &amp; 13.5 \end{bmatrix}<br>$$</p>
+<h3 id="步骤-4：计算判别向量"><a href="#步骤-4：计算判别向量" class="headerlink" title="步骤 4：计算判别向量"></a>步骤 4：计算判别向量</h3><p>$$<br>通过计算 S_W^{-1} S_B 并求出最大的特征值和特征向量，得到 LDA 的判别向量。<br>$$</p>
+<p>$$<br>假设我们通过计算得到投影向量 \mathbf{w}，并利用该投影向量对新数据进行分类。<br>$$</p>
+<hr>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>LDA 是一种有效的分类方法，特别适用于高维数据的分类问题。通过最大化类间散度与类内散度的比率，LDA 能够找到最优的线性分割超平面，并进行分类。在实际应用中，LDA 能够显著提高分类效果，尤其在类别之间具有良好线性可分性的情况下。</p>
+
+      <div class="tags">
+          <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="ic i-tag"></i> 机器学习</a>
+          <a href="/tags/LDA/" rel="tag"><i class="ic i-tag"></i> LDA</a>
+          <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"><i class="ic i-tag"></i> 技术</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2025-12-16 10:36:35" itemprop="dateModified" datetime="2025-12-16T10:36:35+08:00">2025-12-16</time>
+  </span>
+  <span id="2025/12/16/LDA/" class="item leancloud_visitors" data-flag-title="线性判别分析方法" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+      
+      <div>
+        <img data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/wechatpay.png" alt="橙子 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div>
+        <img data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/alipay.png" alt="橙子 支付宝">
+        <p>支付宝</p>
+      </div>
+      
+      <div>
+        <img data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/paypal.png" alt="橙子 贝宝">
+        <p>贝宝</p>
+      </div>
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>橙子 <i class="ic i-at"><em>@</em></i>橙子的小站
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://orangeplz.github.io/2025/12/16/LDA/" title="线性判别分析方法">https://orangeplz.github.io/2025/12/16/LDA/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2025/12/16/K-FOLD%20CV%20vs%20LOOCV/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;static.wikitide.net&#x2F;strinovawiki&#x2F;4&#x2F;44&#x2F;Wallpaper_%E5%90%8D%E4%BE%A6%E6%8E%A2%E7%9A%84%E8%AF%95%E7%82%BC.png" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 技术</span>
+  <h3>K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E5%88%A4%E5%88%AB%E5%88%86%E6%9E%90%EF%BC%88LDA%EF%BC%89%E5%88%86%E7%B1%BB%E6%96%B9%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">线性判别分析（LDA）分类方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-LDA-%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">1. LDA 的基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E5%88%AB%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.1.</span> <span class="toc-text">判别函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-LDA-%E7%9A%84%E5%88%86%E7%B1%BB%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.</span> <span class="toc-text">2. LDA 的分类步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-LDA-%E5%88%86%E7%B1%BB%E7%9A%84%E5%85%B7%E4%BD%93%E6%95%B0%E5%AD%97%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.3.</span> <span class="toc-text">3. LDA 分类的具体数字示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-1%EF%BC%9A%E8%AE%A1%E7%AE%97%E5%90%84%E7%B1%BB%E5%88%AB%E5%9D%87%E5%80%BC"><span class="toc-number">1.3.1.</span> <span class="toc-text">步骤 1：计算各类别均值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-2%EF%BC%9A%E8%AE%A1%E7%AE%97%E7%B1%BB%E5%86%85%E6%95%A3%E5%BA%A6%E7%9F%A9%E9%98%B5-S-W"><span class="toc-number">1.3.2.</span> <span class="toc-text">步骤 2：计算类内散度矩阵 (S_W)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-3%EF%BC%9A%E8%AE%A1%E7%AE%97%E7%B1%BB%E9%97%B4%E6%95%A3%E5%BA%A6%E7%9F%A9%E9%98%B5-S-B"><span class="toc-number">1.3.3.</span> <span class="toc-text">步骤 3：计算类间散度矩阵 (S_B)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-4%EF%BC%9A%E8%AE%A1%E7%AE%97%E5%88%A4%E5%88%AB%E5%90%91%E9%87%8F"><span class="toc-number">1.3.4.</span> <span class="toc-text">步骤 4：计算判别向量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">4. 总结</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2025/12/15/%E5%93%88%E5%B8%8C/" rel="bookmark" title="哈希索引的一些浅薄见解">哈希索引的一些浅薄见解</a></li><li><a href="/2025/12/15/%E5%9F%BA%E4%BA%8E%E6%A0%91%E7%9A%84%E7%B4%A2%E5%BC%95/" rel="bookmark" title="深度解析基于树的索引：从二叉树到B+树与LSM树">深度解析基于树的索引：从二叉树到B+树与LSM树</a></li><li><a href="/2025/12/16/K-FOLD%20CV%20vs%20LOOCV/" rel="bookmark" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</a></li><li><a href="/2025/12/16/%E9%9D%9E%E8%B4%9F%E7%BB%9E%E7%B4%A2-Nonnegative%20Garrote/" rel="bookmark" title="非负绞索介绍">非负绞索介绍</a></li><li><a href="/2025/12/16/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" rel="bookmark" title="利用《卡拉彼丘》理解 PCA、Projection Pursuit、PCR 和 PLS">利用《卡拉彼丘》理解 PCA、Projection Pursuit、PCR 和 PLS</a></li><li class="active"><a href="/2025/12/16/LDA/" rel="bookmark" title="线性判别分析方法">线性判别分析方法</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="橙子"
+      data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/source/images/avatar.png">
+  <p class="name" itemprop="name">橙子</p>
+  <div class="description" itemprop="description"></div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">6</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">1</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">9</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/15/%E5%93%88%E5%B8%8C/" title="哈希索引的一些浅薄见解">哈希索引的一些浅薄见解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/16/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" title="利用《卡拉彼丘》理解 PCA、Projection Pursuit、PCR 和 PLS">利用《卡拉彼丘》理解 PCA、Projection Pursuit、PCR 和 PLS</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/16/LDA/" title="线性判别分析方法">线性判别分析方法</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/15/%E5%9F%BA%E4%BA%8E%E6%A0%91%E7%9A%84%E7%B4%A2%E5%BC%95/" title="深度解析基于树的索引：从二叉树到B+树与LSM树">深度解析基于树的索引：从二叉树到B+树与LSM树</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/16/%E9%9D%9E%E8%B4%9F%E7%BB%9E%E7%B4%A2-Nonnegative%20Garrote/" title="非负绞索介绍">非负绞索介绍</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/16/K-FOLD%20CV%20vs%20LOOCV/" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">橙子 @ 橙子的小窝</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2025/12/16/LDA/',
+    favicon: {
+      show: "（●´3｀●）やれやれだぜ",
+      hide: "(´Д｀)大変だ！"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>
