@@ -1,0 +1,588 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="橙子的小站" href="https://orangeplz.github.io/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="橙子的小站" href="https://orangeplz.github.io/atom.xml" />
+<link rel="alternate" type="application/json" title="橙子的小站" href="https://orangeplz.github.io/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="机器学习,技术,模型选择" />
+
+
+<link rel="canonical" href="https://orangeplz.github.io/2025/12/16/%E9%9D%9E%E8%B4%9F%E7%BB%9E%E7%B4%A2-Nonnegative%20Garrote/">
+
+
+
+  <title>
+非负绞索介绍 - 技术 |
+橙子的小窝 = 橙子的小站 = 记录猪生活</title>
+<meta name="generator" content="Hexo 8.1.1"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">非负绞索介绍
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2025-12-16 08:45:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2025-12-16T08:45:00+08:00">2025-12-16</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">橙子的小窝</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+          <img src="https://static.wikitide.net/strinovawiki/e/e8/Wallpaper_Global_Promotional.jpg">
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="item" rel="index" title="分类于 技术"><span itemprop="name">技术</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://orangeplz.github.io/2025/12/16/%E9%9D%9E%E8%B4%9F%E7%BB%9E%E7%B4%A2-Nonnegative%20Garrote/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/source/images/avatar.png">
+    <meta itemprop="name" content="橙子">
+    <meta itemprop="description" content="记录猪生活, ">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="橙子的小站">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="nonnegative-garrote-介绍"><a class="markdownIt-Anchor" href="#nonnegative-garrote-介绍">#</a> Nonnegative Garrote 介绍</h1>
+<p>在统计学习和机器学习中，模型选择和特征选择是构建有效模型的关键步骤。<strong>Nonnegative Garrote (NNG)</strong> 是一种用于模型选择的技术，它在回归分析中尤为重要，尤其是在变量选择和系数估计过程中。本文将介绍 Nonnegative Garrote 的原理、算法步骤、优缺点，并与其他方法进行对比。</p>
+<h2 id="1-什么是-nonnegative-garrote"><a class="markdownIt-Anchor" href="#1-什么是-nonnegative-garrote">#</a> 1. 什么是 Nonnegative Garrote？</h2>
+<p>Nonnegative Garrote 是一种通过对回归模型的系数进行缩放和约束来实现变量选择的技术。其最初由 <strong>Breiman</strong>（1995）提出，并且属于一种<strong>正则化</strong>方法，旨在对回归模型进行 “修剪”，去除那些对模型预测贡献较小的特征。</p>
+<p>具体而言，Nonnegative Garrote 对回归系数进行重新加权，使得一些系数趋近于零，从而实现特征选择。这种方法的关键在于它使用非负的加权系数，使得最后的模型具有可解释性，并且保持了对大部分变量的贡献。</p>
+<h2 id="2-nonnegative-garrote-的原理"><a class="markdownIt-Anchor" href="#2-nonnegative-garrote-的原理">#</a> 2. Nonnegative Garrote 的原理</h2>
+<p>Nonnegative Garrote 的原理基于以下几个要点：</p>
+<ol>
+<li>
+<p><strong>线性回归模型：</strong> 假设有一个线性回归模型，目标是通过最小化残差平方和来拟合模型：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munder><mo><mi>min</mi><mo>⁡</mo></mo><mi>β</mi></munder><mi mathvariant="normal">∣</mi><mi>Y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msubsup><mi mathvariant="normal">∣</mi><mn>2</mn><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\min_{\beta} | Y - X\beta |_2^2
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.638216em;vertical-align:-0.8882159999999999em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.66786em;"><span style="top:-2.3478920000000003em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05278em;">β</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">min</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8882159999999999em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p>其中，(Y) 是响应变量，( X ) 是设计矩阵，</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>β</mi><mtext>是回归系数。</mtext></mrow><annotation encoding="application/x-tex">\beta是回归系数。
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="mord cjk_fallback">是</span><span class="mord cjk_fallback">回</span><span class="mord cjk_fallback">归</span><span class="mord cjk_fallback">系</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">。</span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>修改回归系数：</strong> Nonnegative Garrote 方法引入了一个额外的正则化步骤，通过对回归系数 (</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span></span></span></span></span></p>
+<p>) 进行重新加权，即将回归系数通过非负因子 (</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>γ</mi></mrow><annotation encoding="application/x-tex">\gamma
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span></span></span></span></span></p>
+<p>) 进行缩放：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">[</mo><msup><mi>β</mi><mtext>new</mtext></msup><mo>=</mo><mi>γ</mi><mo>⋅</mo><mi>β</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[
+\beta^{\text{new}} = \gamma \cdot \beta
+]
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">new</span></span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.63889em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="mclose">]</span></span></span></span></span></p>
+<p>其中，</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>γ</mi><mtext>是一个非负系数，通常通过拟合过程来确定。对于一些不重要的特征，</mtext><mo stretchy="false">(</mo><mi>γ</mi><mo stretchy="false">)</mo><mtext>的值会趋近于</mtext><mn>0</mn><mtext>，从而达到选择变量的目的。</mtext></mrow><annotation encoding="application/x-tex">\gamma 是一个非负系数，通常通过拟合过程来确定。对于一些不重要的特征，( \gamma ) 的值会趋近于 0，从而达到选择变量的目的。
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="mord cjk_fallback">是</span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">个</span><span class="mord cjk_fallback">非</span><span class="mord cjk_fallback">负</span><span class="mord cjk_fallback">系</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">，</span><span class="mord cjk_fallback">通</span><span class="mord cjk_fallback">常</span><span class="mord cjk_fallback">通</span><span class="mord cjk_fallback">过</span><span class="mord cjk_fallback">拟</span><span class="mord cjk_fallback">合</span><span class="mord cjk_fallback">过</span><span class="mord cjk_fallback">程</span><span class="mord cjk_fallback">来</span><span class="mord cjk_fallback">确</span><span class="mord cjk_fallback">定</span><span class="mord cjk_fallback">。</span><span class="mord cjk_fallback">对</span><span class="mord cjk_fallback">于</span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">些</span><span class="mord cjk_fallback">不</span><span class="mord cjk_fallback">重</span><span class="mord cjk_fallback">要</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">特</span><span class="mord cjk_fallback">征</span><span class="mord cjk_fallback">，</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="mclose">)</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">值</span><span class="mord cjk_fallback">会</span><span class="mord cjk_fallback">趋</span><span class="mord cjk_fallback">近</span><span class="mord cjk_fallback">于</span><span class="mord">0</span><span class="mord cjk_fallback">，</span><span class="mord cjk_fallback">从</span><span class="mord cjk_fallback">而</span><span class="mord cjk_fallback">达</span><span class="mord cjk_fallback">到</span><span class="mord cjk_fallback">选</span><span class="mord cjk_fallback">择</span><span class="mord cjk_fallback">变</span><span class="mord cjk_fallback">量</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">目</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">。</span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>约束条件：</strong> Nonnegative Garrote 强调每个 (</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>γ</mi><mi>i</mi></msub><mo>≥</mo><mn>0</mn><mo stretchy="false">)</mo><mtext>，即系数的缩放因子必须是非负的，这意味着不会“反转”任何系数的符号。这有助于保持模型的解释性和稳定性。</mtext></mrow><annotation encoding="application/x-tex">\gamma_i \geq 0 )，即系数的缩放因子必须是非负的，这意味着不会“反转”任何系数的符号。这有助于保持模型的解释性和稳定性。
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8304100000000001em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mord cjk_fallback">，</span><span class="mord cjk_fallback">即</span><span class="mord cjk_fallback">系</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">缩</span><span class="mord cjk_fallback">放</span><span class="mord cjk_fallback">因</span><span class="mord cjk_fallback">子</span><span class="mord cjk_fallback">必</span><span class="mord cjk_fallback">须</span><span class="mord cjk_fallback">是</span><span class="mord cjk_fallback">非</span><span class="mord cjk_fallback">负</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">，</span><span class="mord cjk_fallback">这</span><span class="mord cjk_fallback">意</span><span class="mord cjk_fallback">味</span><span class="mord cjk_fallback">着</span><span class="mord cjk_fallback">不</span><span class="mord cjk_fallback">会</span><span class="mord">“</span><span class="mord cjk_fallback">反</span><span class="mord cjk_fallback">转</span><span class="mord">”</span><span class="mord cjk_fallback">任</span><span class="mord cjk_fallback">何</span><span class="mord cjk_fallback">系</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">符</span><span class="mord cjk_fallback">号</span><span class="mord cjk_fallback">。</span><span class="mord cjk_fallback">这</span><span class="mord cjk_fallback">有</span><span class="mord cjk_fallback">助</span><span class="mord cjk_fallback">于</span><span class="mord cjk_fallback">保</span><span class="mord cjk_fallback">持</span><span class="mord cjk_fallback">模</span><span class="mord cjk_fallback">型</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">解</span><span class="mord cjk_fallback">释</span><span class="mord cjk_fallback">性</span><span class="mord cjk_fallback">和</span><span class="mord cjk_fallback">稳</span><span class="mord cjk_fallback">定</span><span class="mord cjk_fallback">性</span><span class="mord cjk_fallback">。</span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>优化过程：</strong> Nonnegative Garrote 的优化过程：</p>
+<ul>
+<li>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>通过最小化以下目标函数，来寻找合适的缩放因子</mtext><mo stretchy="false">(</mo><mi>γ</mi><mo stretchy="false">)</mo><mtext>：</mtext><mo stretchy="false">[</mo><munder><mo><mi>min</mi><mo>⁡</mo></mo><mi>γ</mi></munder><mi mathvariant="normal">∣</mi><mi>Y</mi><mo>−</mo><mi>X</mi><mo stretchy="false">(</mo><mi>γ</mi><mo>⋅</mo><mi>β</mi><mo stretchy="false">)</mo><msubsup><mi mathvariant="normal">∣</mi><mn>2</mn><mn>2</mn></msubsup><mspace width="1em"/><mtext>subject to</mtext><mspace width="1em"/><msub><mi>γ</mi><mi>i</mi></msub><mo>≥</mo><mn>0</mn><mo separator="true">,</mo><mi mathvariant="normal">∀</mi><mi>i</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">通过最小化以下目标函数，来寻找合适的缩放因子 ( \gamma )：
+  [
+  \min_{\gamma} | Y - X (\gamma \cdot \beta) |_2^2 \quad \text{subject to} \quad \gamma_i \geq 0, \forall i
+]
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.5861079999999999em;vertical-align:-0.836108em;"></span><span class="mord cjk_fallback">通</span><span class="mord cjk_fallback">过</span><span class="mord cjk_fallback">最</span><span class="mord cjk_fallback">小</span><span class="mord cjk_fallback">化</span><span class="mord cjk_fallback">以</span><span class="mord cjk_fallback">下</span><span class="mord cjk_fallback">目</span><span class="mord cjk_fallback">标</span><span class="mord cjk_fallback">函</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">，</span><span class="mord cjk_fallback">来</span><span class="mord cjk_fallback">寻</span><span class="mord cjk_fallback">找</span><span class="mord cjk_fallback">合</span><span class="mord cjk_fallback">适</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">缩</span><span class="mord cjk_fallback">放</span><span class="mord cjk_fallback">因</span><span class="mord cjk_fallback">子</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="mclose">)</span><span class="mord cjk_fallback">：</span><span class="mopen">[</span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.66786em;"><span style="top:-2.4000000000000004em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05556em;">γ</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">min</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.836108em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="mclose">)</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:1em;"></span><span class="mord text"><span class="mord">subject to</span></span><span class="mspace" style="margin-right:1em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">∀</span><span class="mord mathnormal">i</span><span class="mclose">]</span></span></span></span></span></p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="3-nonnegative-garrote-的算法步骤"><a class="markdownIt-Anchor" href="#3-nonnegative-garrote-的算法步骤">#</a> 3. Nonnegative Garrote 的算法步骤</h2>
+<p>Nonnegative Garrote 的基本算法步骤如下：</p>
+<ol>
+<li>
+<p><strong>初始化：</strong> 给定数据集 (X) 和 ( Y )，首先使用最小二乘法进行普通的线性回归拟合，得到初步的回归系数 ( \beta^{(0)} )。</p>
+</li>
+<li>
+<p><strong>计算缩放因子：</strong> 对于每个回归系数 (</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>β</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\beta_i
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p>)，计算其对应的缩放因子 (</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>γ</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\gamma_i
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p>)，通过最小化目标函数来获得 (</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>γ</mi><mo stretchy="false">)</mo><mtext>的值。</mtext></mrow><annotation encoding="application/x-tex">\gamma) 的值。
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="mclose">)</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">值</span><span class="mord cjk_fallback">。</span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>更新系数：</strong> 将更新后的回归系数表示为</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><msup><mi>β</mi><mtext>new</mtext></msup><mo>=</mo><mi>γ</mi><mo>⋅</mo><msup><mi>β</mi><mrow><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo></mrow></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">( \beta^{\text{new}} = \gamma \cdot \beta^{(0)} )
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">new</span></span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.63889em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.188em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mtight">0</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></p>
+<p>。</p>
+</li>
+<li>
+<p><strong>收敛性检验：</strong> 检查优化过程是否收敛。如果收敛，则输出最终的回归系数；如果没有收敛，则继续优化。</p>
+</li>
+<li>
+<p><strong>特征选择：</strong> 在最终模型中，许多小的系数会被缩小为零，因此可以将这些变量从模型中移除，得到简化的回归模型。</p>
+</li>
+</ol>
+<h2 id="4-优缺点分析"><a class="markdownIt-Anchor" href="#4-优缺点分析">#</a> 4. 优缺点分析</h2>
+<h3 id="优点"><a class="markdownIt-Anchor" href="#优点">#</a> 优点</h3>
+<ul>
+<li><strong>特征选择：</strong> Nonnegative Garrote 能够自动进行特征选择。通过将不重要的回归系数缩小为零，去除不相关的特征，从而提升模型的简洁性和可解释性。</li>
+<li><strong>保留可解释性：</strong> 相较于其他方法（如 Lasso），Nonnegative Garrote 保证了回归系数的符号不会被反转，保持了模型的可解释性。</li>
+<li><strong>适用于高维数据：</strong> 对于高维数据集，Nonnegative Garrote 是一种有效的降维工具，能够在保证模型性能的同时减少特征维度。</li>
+</ul>
+<h3 id="缺点"><a class="markdownIt-Anchor" href="#缺点">#</a> 缺点</h3>
+<ul>
+<li><strong>计算复杂度较高：</strong> 尽管 Nonnegative Garrote 是一种有效的特征选择方法，但它仍然需要多次迭代优化，计算开销较大，特别是在样本量和特征维度较高时。</li>
+<li><strong>依赖于初始回归模型：</strong> Nonnegative Garrote 的性能依赖于初始回归系数的质量。如果初步拟合的模型较差，则最终的优化结果可能不理想。</li>
+<li><strong>对于某些数据集可能不适用：</strong> 在某些情况下，Nonnegative Garrote 可能不如 Lasso 或 Ridge 回归等其他方法有效，特别是当数据集包含强相关特征时。</li>
+</ul>
+<h2 id="5-nonnegative-garrote-与其他方法对比"><a class="markdownIt-Anchor" href="#5-nonnegative-garrote-与其他方法对比">#</a> 5. Nonnegative Garrote 与其他方法对比</h2>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Nonnegative Garrote</th>
+<th>Lasso</th>
+<th>Ridge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>正则化方式</strong></td>
+<td>非负缩放系数</td>
+<td>L1 正则化（Lasso）</td>
+<td>L2 正则化（Ridge）</td>
+</tr>
+<tr>
+<td><strong>特征选择</strong></td>
+<td>自动特征选择，系数缩放为零</td>
+<td>特征选择，系数缩小为零</td>
+<td>无特征选择，仅通过缩小系数来避免过拟合</td>
+</tr>
+<tr>
+<td><strong>计算复杂度</strong></td>
+<td>中等，依赖于优化过程</td>
+<td>低，Lasso 可以通过坐标下降法高效求解</td>
+<td>低，Ridge 回归有封闭解</td>
+</tr>
+<tr>
+<td><strong>解释性</strong></td>
+<td>具有较好的解释性，保证系数符号不变</td>
+<td>可能导致系数符号反转</td>
+<td>解释性较差，无法提供特征选择</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>高维数据，变量选择</td>
+<td>稀疏特征选择，线性模型</td>
+<td>数据有多重共线性时的回归问题</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-总结"><a class="markdownIt-Anchor" href="#6-总结">#</a> 6. 总结</h2>
+<p>Nonnegative Garrote 是一种有效的模型选择和特征选择方法，通过非负缩放系数来优化回归模型。它特别适用于高维数据，能够自动选择重要的特征并简化模型。与 Lasso 和 Ridge 相比，Nonnegative Garrote 保持了模型的可解释性，并且通过非负约束避免了系数符号的反转。然而，其计算复杂度较高，且依赖于初始回归系数的质量。</p>
+<p>在实际应用中，可以根据数据的特性和问题需求选择合适的正则化方法。Nonnegative Garrote 是一种非常有用的工具，特别适合需要保留模型可解释性和进行特征选择的回归任务。</p>
+
+      <div class="tags">
+          <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="ic i-tag"></i> 机器学习</a>
+          <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"><i class="ic i-tag"></i> 技术</a>
+          <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9/" rel="tag"><i class="ic i-tag"></i> 模型选择</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2025-12-16 09:23:14" itemprop="dateModified" datetime="2025-12-16T09:23:14+08:00">2025-12-16</time>
+  </span>
+  <span id="2025/12/16/非负绞索-Nonnegative Garrote/" class="item leancloud_visitors" data-flag-title="非负绞索介绍" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+      
+      <div>
+        <img data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/wechatpay.png" alt="橙子 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div>
+        <img data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/alipay.png" alt="橙子 支付宝">
+        <p>支付宝</p>
+      </div>
+      
+      <div>
+        <img data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/paypal.png" alt="橙子 贝宝">
+        <p>贝宝</p>
+      </div>
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>橙子 <i class="ic i-at"><em>@</em></i>橙子的小站
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://orangeplz.github.io/2025/12/16/%E9%9D%9E%E8%B4%9F%E7%BB%9E%E7%B4%A2-Nonnegative%20Garrote/" title="非负绞索介绍">https://orangeplz.github.io/2025/12/16/非负绞索-Nonnegative Garrote/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2025/12/15/%E5%9F%BA%E4%BA%8E%E6%A0%91%E7%9A%84%E7%B4%A2%E5%BC%95/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;shouyoujz.com&#x2F;wp-content&#x2F;uploads&#x2F;2022&#x2F;03&#x2F;1-1.jpg" title="深度解析基于树的索引：从二叉树到B+树与LSM树">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 技术</span>
+  <h3>深度解析基于树的索引：从二叉树到B+树与LSM树</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2025/12/16/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;strinova.org&#x2F;wiki&#x2F;Kokona&#x2F;gallery#&#x2F;media&#x2F;File:Kokona_Pledge.png" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 技术</span>
+  <h3>K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#nonnegative-garrote-%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text"> Nonnegative Garrote 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-nonnegative-garrote"><span class="toc-number">1.1.</span> <span class="toc-text"> 1. 什么是 Nonnegative Garrote？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-nonnegative-garrote-%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text"> 2. Nonnegative Garrote 的原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-nonnegative-garrote-%E7%9A%84%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.3.</span> <span class="toc-text"> 3. Nonnegative Garrote 的算法步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BC%98%E7%BC%BA%E7%82%B9%E5%88%86%E6%9E%90"><span class="toc-number">1.4.</span> <span class="toc-text"> 4. 优缺点分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">1.4.1.</span> <span class="toc-text"> 优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">1.4.2.</span> <span class="toc-text"> 缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-nonnegative-garrote-%E4%B8%8E%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95%E5%AF%B9%E6%AF%94"><span class="toc-number">1.5.</span> <span class="toc-text"> 5. Nonnegative Garrote 与其他方法对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text"> 6. 总结</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2025/12/15/%E5%9F%BA%E4%BA%8E%E6%A0%91%E7%9A%84%E7%B4%A2%E5%BC%95/" rel="bookmark" title="深度解析基于树的索引：从二叉树到B+树与LSM树">深度解析基于树的索引：从二叉树到B+树与LSM树</a></li><li><a href="/2025/12/15/%E5%93%88%E5%B8%8C/" rel="bookmark" title="哈希索引的一些浅薄见解">哈希索引的一些浅薄见解</a></li><li><a href="/2025/12/16/K-FOLD%20CV%20vs%20LOOCV/" rel="bookmark" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</a></li><li><a href="/2025/12/16/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" rel="bookmark" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</a></li><li class="active"><a href="/2025/12/16/%E9%9D%9E%E8%B4%9F%E7%BB%9E%E7%B4%A2-Nonnegative%20Garrote/" rel="bookmark" title="非负绞索介绍">非负绞索介绍</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="橙子"
+      data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/source/images/avatar.png">
+  <p class="name" itemprop="name">橙子</p>
+  <div class="description" itemprop="description"></div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">5</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">1</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">8</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2025/12/15/%E5%9F%BA%E4%BA%8E%E6%A0%91%E7%9A%84%E7%B4%A2%E5%BC%95/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2025/12/16/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/16/K-FOLD%20CV%20vs%20LOOCV/" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/15/%E5%93%88%E5%B8%8C/" title="哈希索引的一些浅薄见解">哈希索引的一些浅薄见解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/16/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/15/%E5%9F%BA%E4%BA%8E%E6%A0%91%E7%9A%84%E7%B4%A2%E5%BC%95/" title="深度解析基于树的索引：从二叉树到B+树与LSM树">深度解析基于树的索引：从二叉树到B+树与LSM树</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/16/%E9%9D%9E%E8%B4%9F%E7%BB%9E%E7%B4%A2-Nonnegative%20Garrote/" title="非负绞索介绍">非负绞索介绍</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">橙子 @ 橙子的小窝</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2025/12/16/非负绞索-Nonnegative Garrote/',
+    favicon: {
+      show: "（●´3｀●）やれやれだぜ",
+      hide: "(´Д｀)大変だ！"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

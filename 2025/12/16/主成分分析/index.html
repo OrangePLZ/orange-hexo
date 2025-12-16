@@ -1,0 +1,578 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="橙子的小站" href="https://orangeplz.github.io/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="橙子的小站" href="https://orangeplz.github.io/atom.xml" />
+<link rel="alternate" type="application/json" title="橙子的小站" href="https://orangeplz.github.io/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="机器学习,技术,PCA" />
+
+
+<link rel="canonical" href="https://orangeplz.github.io/2025/12/16/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/">
+
+
+
+  <title>
+K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍 - 技术 |
+橙子的小窝 = 橙子的小站 = 记录猪生活</title>
+<meta name="generator" content="Hexo 8.1.1"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2025-12-16 08:45:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2025-12-16T08:45:00+08:00">2025-12-16</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">橙子的小窝</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+          <img src="https://strinova.org/wiki/Kokona/gallery#/media/File:Kokona_Pledge.png">
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="item" rel="index" title="分类于 技术"><span itemprop="name">技术</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://orangeplz.github.io/2025/12/16/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/source/images/avatar.png">
+    <meta itemprop="name" content="橙子">
+    <meta itemprop="description" content="记录猪生活, ">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="橙子的小站">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="利用卡拉彼丘理解-pca-projection-pursuit-pcr-和-pls"><a class="markdownIt-Anchor" href="#利用卡拉彼丘理解-pca-projection-pursuit-pcr-和-pls">#</a> 利用《卡拉彼丘》理解 PCA、Projection Pursuit、PCR 和 PLS</h1>
+<p>在统计学习与降维分析中，<strong>主成分分析（PCA）</strong>、<strong>投影追踪（Projection Pursuit）</strong>、<strong>主成分回归（PCR）</strong> 和 <strong>偏最小二乘回归（PLS）</strong> 是常用的多变量分析技术。它们各自有不同的目标和应用场景。本篇文章通过对一款热门游戏 <strong>《卡拉彼丘（Strinova）》</strong> 的设定做类比来帮助理解这些算法的核心思想。</p>
+<p><em>注：本文以游戏世界中许多维度的属性（例如角色的技能、枪械性能、战斗效率等）作为高维数据的比喻工具。</em></p>
+<hr>
+<h2 id="游戏背景简述"><a class="markdownIt-Anchor" href="#游戏背景简述">#</a> 🎮 游戏背景简述</h2>
+<p>《卡拉彼丘》是一款第三人称战术竞技射击游戏，允许玩家在 3D 与 2D 形态之间自由切换，并有多种角色属性和技能组合。玩家在设计角色与配装时，会面对多维属性的数据，例如：攻击力、射速、移动速度、防御、技能冷却等。</p>
+<p>想象我们收集了大量玩家数据，每个玩家对应一个高维向量（如 10 个属性），我们希望对这些数据做降维分析和回归预测，就可以用上 PCA、Projection Pursuit、PCR、PLS 等技术。</p>
+<hr>
+<h2 id="1-主成分分析pca"><a class="markdownIt-Anchor" href="#1-主成分分析pca">#</a> 📉 1. 主成分分析（PCA）</h2>
+<h3 id="目标"><a class="markdownIt-Anchor" href="#目标">#</a> 🎯 目标</h3>
+<p>PCA 的核心目标是：<strong>在尽可能保留原始数据 <em>整体方差</em> 的前提下，将高维数据映射到低维空间</strong>。</p>
+<h3 id="游戏类比场景"><a class="markdownIt-Anchor" href="#游戏类比场景">#</a> 🎮 游戏类比场景</h3>
+<p>假设我们有大量玩家的多维战斗数据：</p>
+<ul>
+<li>属性矩阵 X：包括攻击力、移动速度、散射、技能伤害等 10 维特征；</li>
+<li>每个玩家形象地对应一个 “战斗状态向量”。</li>
+</ul>
+<p>PCA 会找到这些高维数据中最重要的方向（<em>主成分</em>），用于压缩维度。例如将 10 维特征压缩到 2 维，但尽可能保留战斗表现的主要变异信息。</p>
+<p>可以把 PCA 想象成在《卡拉彼丘》的属性空间中找到最能区分不同玩家玩法的 “核心策略方向”。</p>
+<p>技术上，PCA 是对协方差矩阵做 <strong>特征值分解</strong>（或 SVD），选取最大的几个特征值对应的特征向量作为主成分方向。</p>
+<h3 id="适用情况"><a class="markdownIt-Anchor" href="#适用情况">#</a> 🧠 适用情况</h3>
+<ul>
+<li>当你想探索游戏数据基础结构；</li>
+<li>想把复杂数据可视化；</li>
+<li>需要降维做数据预处理</li>
+</ul>
+<hr>
+<h2 id="2-投影追踪projection-pursuit"><a class="markdownIt-Anchor" href="#2-投影追踪projection-pursuit">#</a> 🔍 2. 投影追踪（Projection Pursuit）</h2>
+<h3 id="目标-2"><a class="markdownIt-Anchor" href="#目标-2">#</a> 🎯 目标</h3>
+<p><strong>投影追踪</strong>也做降维，但重点不同。它试图找到 <strong>最有 “趣味性” 或非高斯性的投影方向</strong>，不是单纯保留方差，而是发现结构（如聚类、异常点、非线性结构）。</p>
+<h3 id="游戏类比场景-2"><a class="markdownIt-Anchor" href="#游戏类比场景-2">#</a> 🎮 游戏类比场景</h3>
+<p>假设我们想发现哪些属性组合能更好地区分胜率高低。例如：</p>
+<ul>
+<li>角色在 3D 切换地图中的表现；</li>
+<li>是否存在特殊组合（如极高射速）导致 “爆发流玩法”（比如说蝴蝶）。</li>
+</ul>
+<p>投影追踪会寻找哪种线性组合最能展现数据中的有趣结构，可能不是方差最大，但对于某些策略更能体现出胜负差异。</p>
+<p>可以把它理解为：<strong>找出那些玩家常常忽视但实际对胜率贡献显著的方向组合</strong>。</p>
+<h3 id="优缺点"><a class="markdownIt-Anchor" href="#优缺点">#</a> 🧠 优缺点</h3>
+<ul>
+<li>优点：能发现 PCA 不易发现的结构；</li>
+<li>缺点：算法求解更复杂，往往需要手工设定评价函数。</li>
+</ul>
+<hr>
+<h2 id="3-主成分回归pcr"><a class="markdownIt-Anchor" href="#3-主成分回归pcr">#</a> 📊 3. 主成分回归（PCR）</h2>
+<h3 id="目标-3"><a class="markdownIt-Anchor" href="#目标-3">#</a> 🎯 目标</h3>
+<p>** 主成分回归（PCR）** 结合了 PCA 和线性回归：</p>
+<ol>
+<li>先用 PCA 降维；</li>
+<li>再用这些主成分作为解释变量做回归预测目标变量。</li>
+</ol>
+<p>假设我们想预测：</p>
+<blockquote>
+<p>某位玩家在《卡拉彼丘》的胜率或 <em>KDA（击杀 / 死亡）</em>。</p>
+</blockquote>
+<h3 id="游戏类比场景-3"><a class="markdownIt-Anchor" href="#游戏类比场景-3">#</a> 🎮 游戏类比场景</h3>
+<p>我们有：</p>
+<ul>
+<li>X：玩家属性矩阵（回合均伤、使用角色、爆头率等）；</li>
+<li>y：该玩家的 “胜率评分”。</li>
+</ul>
+<p>PCR 步骤是：</p>
+<ol>
+<li>用 PCA 把 X 降到若干主成分；</li>
+<li>用这些主成分去预测胜率 y。</li>
+</ol>
+<p>PCR 的好处是降维可以减少噪声，避免多重共线性，使回归更稳定；缺点是 PCA 做降维没有用到 y 信息，可能丢掉对 y 重要的信息。</p>
+<hr>
+<h2 id="4-偏最小二乘回归pls"><a class="markdownIt-Anchor" href="#4-偏最小二乘回归pls">#</a> 📈 4. 偏最小二乘回归（PLS）</h2>
+<h3 id="目标-4"><a class="markdownIt-Anchor" href="#目标-4">#</a> 🎯 目标</h3>
+<p><strong>PLS 与 PCR 有点类似</strong>都是降维回归，但关键不同：<strong>PLS 在降维时会同时考虑 X 和 y 的信息</strong>，使得选出的低维方向更有利于预测目标变量。</p>
+<h3 id="游戏类比场景-4"><a class="markdownIt-Anchor" href="#游戏类比场景-4">#</a> 🎮 游戏类比场景</h3>
+<p>同样预测胜率：</p>
+<ul>
+<li>PLS 在降维时不仅关注玩家属性 X 的结构，还关心这些属性如何影响胜率 y。</li>
+<li>结果得到的低维表示更适合用于预测。</li>
+</ul>
+<p>举个直观的说法：</p>
+<ul>
+<li>PCR 找到的是 “数据最多变化的方向”；</li>
+<li>PLS 找到的是 “最能解释胜率变化的方向”。</li>
+</ul>
+<hr>
+<h2 id="总结对比"><a class="markdownIt-Anchor" href="#总结对比">#</a> 💡 总结对比</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>目标</th>
+<th>降维方式</th>
+<th>是否使用 y 信息</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PCA</strong></td>
+<td>保留最大方差</td>
+<td>是</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Projection Pursuit</strong></td>
+<td>找有趣结构</td>
+<td>是</td>
+<td>❌（目标结构自定义）</td>
+</tr>
+<tr>
+<td><strong>PCR</strong></td>
+<td>用降维后变量做回归</td>
+<td>是</td>
+<td>❌（降维阶段未用 y）</td>
+</tr>
+<tr>
+<td><strong>PLS</strong></td>
+<td>与 y 相关最强的低维表达</td>
+<td>是</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="小结类比一览"><a class="markdownIt-Anchor" href="#小结类比一览">#</a> 🧠 小结类比一览</h2>
+<ul>
+<li><strong>PCA</strong> = 找到游戏属性中最重要的通用策略方向；</li>
+<li><strong>Projection Pursuit</strong> = 找到那些不明显但对策略区分很强的组合；</li>
+<li><strong>PCR</strong> = 用 PCA 提取的主要策略组成去预测胜率；</li>
+<li><strong>PLS</strong> = 直接用最能影响胜率的组合去预测胜率。</li>
+</ul>
+<hr>
+
+      <div class="tags">
+          <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="ic i-tag"></i> 机器学习</a>
+          <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"><i class="ic i-tag"></i> 技术</a>
+          <a href="/tags/PCA/" rel="tag"><i class="ic i-tag"></i> PCA</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2025-12-16 09:48:22" itemprop="dateModified" datetime="2025-12-16T09:48:22+08:00">2025-12-16</time>
+  </span>
+  <span id="2025/12/16/主成分分析/" class="item leancloud_visitors" data-flag-title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+      
+      <div>
+        <img data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/wechatpay.png" alt="橙子 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div>
+        <img data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/alipay.png" alt="橙子 支付宝">
+        <p>支付宝</p>
+      </div>
+      
+      <div>
+        <img data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/paypal.png" alt="橙子 贝宝">
+        <p>贝宝</p>
+      </div>
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>橙子 <i class="ic i-at"><em>@</em></i>橙子的小站
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://orangeplz.github.io/2025/12/16/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">https://orangeplz.github.io/2025/12/16/主成分分析/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2025/12/16/%E9%9D%9E%E8%B4%9F%E7%BB%9E%E7%B4%A2-Nonnegative%20Garrote/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;static.wikitide.net&#x2F;strinovawiki&#x2F;e&#x2F;e8&#x2F;Wallpaper_Global_Promotional.jpg" title="非负绞索介绍">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 技术</span>
+  <h3>非负绞索介绍</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2025/12/16/K-FOLD%20CV%20vs%20LOOCV/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;static.wikitide.net&#x2F;strinovawiki&#x2F;0&#x2F;0d&#x2F;Mobile_Loading_Screen_4.png" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 技术</span>
+  <h3>K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%8D%A1%E6%8B%89%E5%BD%BC%E4%B8%98%E7%90%86%E8%A7%A3-pca-projection-pursuit-pcr-%E5%92%8C-pls"><span class="toc-number">1.</span> <span class="toc-text"> 利用《卡拉彼丘》理解 PCA、Projection Pursuit、PCR 和 PLS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B8%E6%88%8F%E8%83%8C%E6%99%AF%E7%AE%80%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text"> 🎮 游戏背景简述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90pca"><span class="toc-number">1.2.</span> <span class="toc-text"> 📉 1. 主成分分析（PCA）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 🎯 目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%B8%E6%88%8F%E7%B1%BB%E6%AF%94%E5%9C%BA%E6%99%AF"><span class="toc-number">1.2.2.</span> <span class="toc-text"> 🎮 游戏类比场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E6%83%85%E5%86%B5"><span class="toc-number">1.2.3.</span> <span class="toc-text"> 🧠 适用情况</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%8A%95%E5%BD%B1%E8%BF%BD%E8%B8%AAprojection-pursuit"><span class="toc-number">1.3.</span> <span class="toc-text"> 🔍 2. 投影追踪（Projection Pursuit）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-2"><span class="toc-number">1.3.1.</span> <span class="toc-text"> 🎯 目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%B8%E6%88%8F%E7%B1%BB%E6%AF%94%E5%9C%BA%E6%99%AF-2"><span class="toc-number">1.3.2.</span> <span class="toc-text"> 🎮 游戏类比场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">1.3.3.</span> <span class="toc-text"> 🧠 优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%BB%E6%88%90%E5%88%86%E5%9B%9E%E5%BD%92pcr"><span class="toc-number">1.4.</span> <span class="toc-text"> 📊 3. 主成分回归（PCR）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-3"><span class="toc-number">1.4.1.</span> <span class="toc-text"> 🎯 目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%B8%E6%88%8F%E7%B1%BB%E6%AF%94%E5%9C%BA%E6%99%AF-3"><span class="toc-number">1.4.2.</span> <span class="toc-text"> 🎮 游戏类比场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%81%8F%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E5%9B%9E%E5%BD%92pls"><span class="toc-number">1.5.</span> <span class="toc-text"> 📈 4. 偏最小二乘回归（PLS）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87-4"><span class="toc-number">1.5.1.</span> <span class="toc-text"> 🎯 目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%B8%E6%88%8F%E7%B1%BB%E6%AF%94%E5%9C%BA%E6%99%AF-4"><span class="toc-number">1.5.2.</span> <span class="toc-text"> 🎮 游戏类比场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E5%AF%B9%E6%AF%94"><span class="toc-number">1.6.</span> <span class="toc-text"> 💡 总结对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93%E7%B1%BB%E6%AF%94%E4%B8%80%E8%A7%88"><span class="toc-number">1.7.</span> <span class="toc-text"> 🧠 小结类比一览</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2025/12/15/%E5%9F%BA%E4%BA%8E%E6%A0%91%E7%9A%84%E7%B4%A2%E5%BC%95/" rel="bookmark" title="深度解析基于树的索引：从二叉树到B+树与LSM树">深度解析基于树的索引：从二叉树到B+树与LSM树</a></li><li><a href="/2025/12/15/%E5%93%88%E5%B8%8C/" rel="bookmark" title="哈希索引的一些浅薄见解">哈希索引的一些浅薄见解</a></li><li><a href="/2025/12/16/K-FOLD%20CV%20vs%20LOOCV/" rel="bookmark" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</a></li><li class="active"><a href="/2025/12/16/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" rel="bookmark" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</a></li><li><a href="/2025/12/16/%E9%9D%9E%E8%B4%9F%E7%BB%9E%E7%B4%A2-Nonnegative%20Garrote/" rel="bookmark" title="非负绞索介绍">非负绞索介绍</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="橙子"
+      data-src="/https:/klbq-web-cms.strinova.com/prod/strinova_web/images/202505/cbce49dd-9918-4055-923f-75827f24b54d.jpg/source/images/avatar.png">
+  <p class="name" itemprop="name">橙子</p>
+  <div class="description" itemprop="description"></div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">5</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">1</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">8</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2025/12/16/%E9%9D%9E%E8%B4%9F%E7%BB%9E%E7%B4%A2-Nonnegative%20Garrote/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2025/12/16/K-FOLD%20CV%20vs%20LOOCV/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/15/%E5%9F%BA%E4%BA%8E%E6%A0%91%E7%9A%84%E7%B4%A2%E5%BC%95/" title="深度解析基于树的索引：从二叉树到B+树与LSM树">深度解析基于树的索引：从二叉树到B+树与LSM树</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/16/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/15/%E5%93%88%E5%B8%8C/" title="哈希索引的一些浅薄见解">哈希索引的一些浅薄见解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/16/K-FOLD%20CV%20vs%20LOOCV/" title="K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍">K-Fold Cross Validation (K-Fold CV) 和 Leave-One-Out Cross Validation (LOOCV) 介绍</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF/" title="分类于 技术">技术</a>
+</div>
+
+    <span><a href="/2025/12/16/%E9%9D%9E%E8%B4%9F%E7%BB%9E%E7%B4%A2-Nonnegative%20Garrote/" title="非负绞索介绍">非负绞索介绍</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">橙子 @ 橙子的小窝</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2025/12/16/主成分分析/',
+    favicon: {
+      show: "（●´3｀●）やれやれだぜ",
+      hide: "(´Д｀)大変だ！"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>
